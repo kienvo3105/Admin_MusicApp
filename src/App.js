@@ -1,25 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Sidebar, Menu, MenuItem } from 'react-pro-sidebar';
+import { Link } from 'react-router-dom';
+import { Singer } from './page/singer/Singer';
+import { Album } from './page/Album';
+import { Sidebars } from './sidebar/Sidebar';
 
-function App() {
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <Sidebars>
+              <h1>Welcome to the Home page</h1>
+            </Sidebars>
+          }
+        />
+        <Route
+          path="/singer"
+          element={
+            <Sidebars>
+              <Singer />
+            </Sidebars>
+          }
+        />
+        <Route
+          path="/album"
+          element={
+            <Sidebars>
+              <Album />
+            </Sidebars>
+          }
+        />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
