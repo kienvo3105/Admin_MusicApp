@@ -12,7 +12,7 @@ export const Album = () => {
     const [artistList, setArtistList] = useState([]);
     const [imageUrl, setImageUrl] = useState('');
     const [albumList, setAlbumList] = useState([]);
-
+    const [publics, setPublics] = useState();
     //fetch singer
     useEffect(() => {
         const getSinger = async () => {
@@ -49,6 +49,7 @@ export const Album = () => {
                     name: albumData.name,
                     image: albumData.image,
                     signer: artistName,
+                    public: albumData.public,
                 };
                 albumList.push(album);
             }
@@ -98,6 +99,7 @@ export const Album = () => {
             name: albumName,
             image: imageUrl,
             singer: doc(db, `artists/${selectedArtist}`),
+            public: publics
         });
 
         console.log("Document written with ID: ", docRef.id);
@@ -107,6 +109,9 @@ export const Album = () => {
         setImageUrl('');
         setInputKey(Date.now());
     };
+    const handlePublicChange = (event) => {
+        setPublics(event.target.value);
+    }
 
     return (
         <div className="container">
@@ -115,6 +120,10 @@ export const Album = () => {
                 <div className="form-group">
                     <label htmlFor="name">Tên album:</label>
                     <input type="text" value={albumName} onChange={handleAlbumNameChange} className="form-input" />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="public">Public:</label>
+                    <input type="number" id="public" value={publics} onChange={handlePublicChange} className="form-input" />
                 </div>
                 <div className="form-group">
                     <label>Thêm ảnh cho album:</label>
@@ -152,6 +161,9 @@ export const Album = () => {
                         </div>
                         <div>
                             <strong>signer:</strong> {album.signer}
+                        </div>
+                        <div>
+                            <strong>public:</strong> {album.public}
                         </div>
                     </li>
                 ))}

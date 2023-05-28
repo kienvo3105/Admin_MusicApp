@@ -43,7 +43,7 @@ export const Song = () => {
     const [albums, setAlbums] = useState([]);
     const [allGenres, setAllGenres] = useState([]);
     const [selectAlbum, setSelectAlbum] = useState([]);
-
+    const [publics, setPublics] = useState();
     const [selectedSingerOption, setSelectedSingerOption] = useState(null);
 
     useEffect(() => {
@@ -178,7 +178,8 @@ export const Song = () => {
             image: imageUrl,
             lyric: lyricsUrl,
             url: audioUrl,
-            view: views
+            view: views,
+            public: publics
         };
 
         const idSong = convertToLowerCaseNoDiacriticAndRemoveSpaces(name) + `_${primaryArtist}`;
@@ -197,8 +198,13 @@ export const Song = () => {
         setViews(0);
         setSelectedSingerOption([]);
         setInputKey(Date.now());
+        setPublics();
 
     };
+
+    const handlePublicChange = (event) => {
+        setPublics(event.target.value);
+    }
 
     return (
         <div>
@@ -207,6 +213,10 @@ export const Song = () => {
                 <div className="form-group">
                     <label htmlFor="name">Name:</label>
                     <input type="text" id="name" value={name} onChange={handleNameChange} className="form-input" />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="public">Public:</label>
+                    <input type="number" id="public" value={publics} onChange={handlePublicChange} className="form-input" />
                 </div>
                 <div className="form-group">
                     <label htmlFor="primaryArtist">Primary Artist:</label>
