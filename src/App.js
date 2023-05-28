@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Singer } from './page/singer/Singer';
 import { Album } from './page/album/Album';
 import { Sidebars } from './sidebar/Sidebar';
-
+import { Song } from './page/song/Song';
 
 const App = () => {
   return (
@@ -32,6 +32,14 @@ const App = () => {
           element={
             <Sidebars>
               <Album />
+            </Sidebars>
+          }
+        />
+        <Route
+          path="/song"
+          element={
+            <Sidebars>
+              <Song />
             </Sidebars>
           }
         />

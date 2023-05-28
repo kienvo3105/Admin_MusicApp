@@ -56,7 +56,7 @@ export const Album = () => {
             setAlbumList(albumList);
         };
         getAlbum();
-    }, [])
+    }, [inputKey])
 
 
     const handleImageChange = (event) => {

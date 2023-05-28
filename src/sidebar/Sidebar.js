@@ -19,7 +19,7 @@ export const Sidebars = ({ children }) => {
                 >
                     <MenuItem component={<Link to="/singer" />}>Singer</MenuItem>
                     <MenuItem component={<Link to="/album" />}>Album</MenuItem>
-                    <MenuItem>Song</MenuItem>
+                    <MenuItem component={<Link to="/song" />}>Song</MenuItem>
                 </Menu>
             </Sidebar>
             <div style={{ flex: 1, padding: '20px' }}>{children}</div>
