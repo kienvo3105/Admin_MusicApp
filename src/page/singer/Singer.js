@@ -54,7 +54,7 @@ export const Singer = () => {
         await setDoc(doc(db, "artists", singerId), {
             name: name,
             image: imageUrl,
-            follower: followers,
+            follower: parseInt(followers),
         });
 
         // Reset the form after submitting

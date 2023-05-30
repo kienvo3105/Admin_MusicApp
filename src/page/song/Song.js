@@ -43,7 +43,7 @@ export const Song = () => {
     const [albums, setAlbums] = useState([]);
     const [allGenres, setAllGenres] = useState([]);
     const [selectAlbum, setSelectAlbum] = useState([]);
-    const [publics, setPublics] = useState();
+    const [publics, setPublics] = useState(0);
     const [selectedSingerOption, setSelectedSingerOption] = useState(null);
 
     useEffect(() => {
@@ -85,10 +85,38 @@ export const Song = () => {
                 label: doc.data().name,
             }));
             setAllGenres(genresData);
+
+            //get song
+            const querySnapshot = await getDocs(collection(db, "songs"));
+            let songsArray = [];
+            for (const docRef of querySnapshot.docs) {
+                const songData = docRef.data();
+
+                // get singer
+                const signer = await getDoc(songData.artists[0]);
+                //get album
+                const album = await getDoc(songData.album);
+                //object song
+                const song = {
+                    id: docRef.id,
+                    name: songData.name,
+                    uri: songData.uri,
+                    lyric: songData.lyric,
+                    image: songData.image,
+                    public: songData.public,
+                    singer: signer.data().name,
+                    idSinger: signer.id,
+                    idAlbum: album.id,
+                }
+                console.log(song)
+                songsArray.push(song);
+
+            }
+            console.log(songsArray);
+
+
         };
         fetchData();
-
-
 
     }, []);
 
@@ -178,8 +206,8 @@ export const Song = () => {
             image: imageUrl,
             lyric: lyricsUrl,
             url: audioUrl,
-            view: views,
-            public: publics
+            view: parseInt(views),
+            public: parseInt(publics)
         };
 
         const idSong = convertToLowerCaseNoDiacriticAndRemoveSpaces(name) + `_${primaryArtist}`;
@@ -198,7 +226,7 @@ export const Song = () => {
         setViews(0);
         setSelectedSingerOption([]);
         setInputKey(Date.now());
-        setPublics();
+        setPublics(0);
 
     };
 

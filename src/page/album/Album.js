@@ -12,7 +12,7 @@ export const Album = () => {
     const [artistList, setArtistList] = useState([]);
     const [imageUrl, setImageUrl] = useState('');
     const [albumList, setAlbumList] = useState([]);
-    const [publics, setPublics] = useState();
+    const [publics, setPublics] = useState(0);
     //fetch singer
     useEffect(() => {
         const getSinger = async () => {
@@ -99,7 +99,7 @@ export const Album = () => {
             name: albumName,
             image: imageUrl,
             singer: doc(db, `artists/${selectedArtist}`),
-            public: publics
+            public: parseInt(publics)
         });
 
         console.log("Document written with ID: ", docRef.id);
@@ -108,6 +108,7 @@ export const Album = () => {
         setSelectedArtist('');
         setImageUrl('');
         setInputKey(Date.now());
+        setPublics(0);
     };
     const handlePublicChange = (event) => {
         setPublics(event.target.value);
