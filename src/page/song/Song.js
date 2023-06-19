@@ -44,7 +44,7 @@ export const Song = () => {
     const [allGenres, setAllGenres] = useState([]);
     const [selectAlbum, setSelectAlbum] = useState([]);
     const [publics, setPublics] = useState(0);
-    const [selectedSingerOption, setSelectedSingerOption] = useState(null);
+    // const [selectedSingerOption, setSelectedSingerOption] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -53,6 +53,7 @@ export const Song = () => {
             const artistsData = artistSnapshot.docs.map((doc) => ({
                 value: doc.id,
                 label: doc.data().name,
+                image: doc.data().image
             }));
             setArtists(artistsData);
 
@@ -93,9 +94,9 @@ export const Song = () => {
                 const songData = docRef.data();
 
                 // get singer
-                const signer = await getDoc(songData.artists[0]);
+                // const signer = await getDoc(songData.artists[0]);
                 //get album
-                const album = await getDoc(songData.album);
+                // const album = await getDoc(songData.album);
                 //object song
                 const song = {
                     id: docRef.id,
@@ -104,9 +105,9 @@ export const Song = () => {
                     lyric: songData.lyric,
                     image: songData.image,
                     public: songData.public,
-                    singer: signer.data().name,
-                    idSinger: signer.id,
-                    idAlbum: album.id,
+                    singer: songData.artists.name,
+                    idSinger: songData.artists.id,
+                    idAlbum: songData.album,
                 }
                 console.log(song)
                 songsArray.push(song);
@@ -190,19 +191,27 @@ export const Song = () => {
         }
 
         //reference artist
-        const artistFeat = selectedSingerOption?.map((item) => doc(db, `artists/${item.value}`))
+        const singerData = artists.find((item) => item.id === primaryArtist);
+        // const artistFeat = selectedSingerOption?.map((item) => doc(db, `artists/${item.value}`))
 
-        const artistList = artistFeat && artistFeat.length > 0 ? [doc(db, `artists/${primaryArtist}`), ...artistFeat] : [doc(db, `artists/${primaryArtist}`)];
+        // const artistList = artistFeat && artistFeat.length > 0 ? [doc(db, `artists/${primaryArtist}`), ...artistFeat] : [doc(db, `artists/${primaryArtist}`)];
 
         //reference genre
-        const genreList = genres.map((item) => doc(db, `genre/${item.value}`))
+        const genreList = genres.map((item) => item.value)
+
+
 
         // Prepare data to save
         const songData = {
             name: name,
-            artists: artistList,
+            artists: {
+                id: singerData.value,
+                name: singerData.label,
+                image: singerData.image
+            },
             genre: genreList,
-            album: doc(db, `album/${album}`),
+            // album: doc(db, `album/${album}`),
+            album: album,
             image: imageUrl,
             lyric: lyricsUrl,
             url: audioUrl,
@@ -224,7 +233,7 @@ export const Song = () => {
         setName('');
         setAudio(null);
         setViews(0);
-        setSelectedSingerOption([]);
+        // setSelectedSingerOption([]);
         setInputKey(Date.now());
         setPublics(0);
 
@@ -257,7 +266,7 @@ export const Song = () => {
                         ))}
                     </select>
                 </div>
-                <div className="form-group">
+                {/* <div className="form-group">
                     <label htmlFor="featuredArtists">Featured Artists:</label>
                     <Select
                         isMulti
@@ -267,7 +276,7 @@ export const Song = () => {
                         defaultValue={selectedSingerOption}
 
                     />
-                </div>
+                </div> */}
                 <div className="form-group">
                     <label htmlFor="album">Album:</label>
                     <select id="album" value={album} onChange={handleAlbumChange} className="form-input" key={inputKey}>

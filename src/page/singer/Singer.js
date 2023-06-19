@@ -4,10 +4,33 @@ import { doc, setDoc, getDocs, collection } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
 import "./Singer.css"
 
+
+function convertToLowerCaseNoDiacriticAndRemoveSpaces(str) {
+    const withDiacritic = "àáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ";
+    const withoutDiacritic = "aaaaaaaaaaaaaaaaaeeeeeeeeeeeiiiiiooooooooooooooooouuuuuuuuuuuyyyyyd";
+
+    let result = "";
+
+    for (let i = 0; i < str.length; i++) {
+        const char = str[i];
+        const index = withDiacritic.indexOf(char);
+
+        if (index !== -1) {
+            result += withoutDiacritic[index];
+        } else if (char === " ") {
+            continue;
+        } else {
+            result += char.toLowerCase();
+        }
+    }
+
+    return result;
+}
+
 export const Singer = () => {
     const [name, setName] = useState('');
     const [image, setImage] = useState(null);
-    const [singerId, setSingerId] = useState('');
+    // const [singerId, setSingerId] = useState('');
     const [followers, setFollowers] = useState(0);
     const [imageUrl, setImageUrl] = useState('');
     const [inputKey, setInputKey] = useState(Date.now());
@@ -40,9 +63,9 @@ export const Singer = () => {
         setImage(file);
     };
 
-    const handleSingerIdChange = (event) => {
-        setSingerId(event.target.value);
-    };
+    // const handleSingerIdChange = (event) => {
+    //     setSingerId(event.target.value);
+    // };
 
     const handleFollowersChange = (event) => {
         setFollowers(event.target.value);
@@ -50,6 +73,7 @@ export const Singer = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        const singerId = convertToLowerCaseNoDiacriticAndRemoveSpaces(name);
         // Perform the necessary action to save the data
         await setDoc(doc(db, "artists", singerId), {
             name: name,
@@ -60,7 +84,7 @@ export const Singer = () => {
         // Reset the form after submitting
         setName('');
         setImage(null);
-        setSingerId('');
+        // setSingerId('');
         setFollowers(0);
         setInputKey(Date.now());
         setImageUrl('')
@@ -83,7 +107,7 @@ export const Singer = () => {
         <div>
             <h1>Add Singer</h1>
             <form onSubmit={handleSubmit}>
-                <div className="form-group">
+                {/* <div className="form-group">
                     <label htmlFor="singerId">Singer ID:</label>
                     <input
                         type="text"
@@ -92,7 +116,7 @@ export const Singer = () => {
                         onChange={handleSingerIdChange}
                         className="form-input"
                     />
-                </div>
+                </div> */}
                 <div className="form-group">
                     <label htmlFor="name">Name:</label>
                     <input
